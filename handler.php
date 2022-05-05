@@ -21,7 +21,7 @@ $users = [
     new UserEntry(2, 'cow@example.com', 'user3')
 ];
 
-# Validation
+# Validators
 
 function isEmailValid(): bool
 {
@@ -51,7 +51,24 @@ function checkArr(): bool
     return false;
 }
 
-# Main program function
+# Logging
+
+function logToFile(): void
+{
+    $logfile = fopen('out.log', 'a');
+
+    $newline = date('d-m-y h:i:s') . " "
+            . $_SERVER['REMOTE_ADDR'] . " "
+            . http_response_code() . " ";
+    if (array_key_exists('email', $_POST))
+        $newline .= $_POST['email'];
+    $newline .= PHP_EOL;
+
+    fwrite($logfile, $newline);
+    fclose($logfile);
+}
+
+# Main program logic
 
 function process(): void
 {
@@ -85,3 +102,4 @@ function process(): void
 }
 
 process();
+logToFile();
