@@ -4,9 +4,10 @@ async function onButtonClick() {
 
     let response = await sendRequest();
     if (response.ok) {
-        showAlert('Вход успешно произвед7ен.', 'alert-success');
+        showAlert(await response.text(), 'alert-success');
         hideInputs();
-    } else showAlert('Ошибка: ' + await response.text(), 'alert-danger');
+    } else
+        showAlert(await response.text(), 'alert-danger');
 }
 
 function sendRequest() {
