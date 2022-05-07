@@ -1,30 +1,17 @@
 async function onButtonClick() {
-    clearAllAlerts();
+    document.getElementById('alerts_placeholder').innerHTML = ""; // clear all alerts
     if (!isFormValid()) return;
 
-    let response = await sendRequest();
+    let response = await fetch('handler.php', {
+        method: 'POST',
+        body: new FormData(document.getElementById("input_form"))
+    });
+
     if (response.ok) {
         showAlert(await response.text(), 'alert-success');
-        hideInputs();
-    } else
-        showAlert(await response.text(), 'alert-danger');
-}
-
-function sendRequest() {
-    return fetch('handler.php', {
-        method: 'POST',
-        body: new URLSearchParams({
-            name1: document.getElementById('tbx_first_name' ).value,
-            name2: document.getElementById('tbx_last_name'  ).value,
-            email: document.getElementById('tbx_email'      ).value,
-            pass1: document.getElementById('tbx_pass'       ).value,
-            pass2: document.getElementById('tbx_pass_ver'   ).value
-        })
-    });
-}
-
-function hideInputs() {
-    document.getElementById('inputs_panel').style.visibility = 'hidden';
+        document.getElementById('inputs_panel').style.display = 'none';
+    }
+    else showAlert(await response.text(), 'alert-danger');
 }
 
 function isFormValid() {
@@ -61,8 +48,4 @@ function showAlert(msg, style) {
             '<button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>' +
             '<span>' + msg + '<\span>' +
         '</div>';
-}
-
-function clearAllAlerts() {
-    document.getElementById('alerts_placeholder').innerHTML = "";
 }

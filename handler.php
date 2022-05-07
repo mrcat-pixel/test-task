@@ -56,10 +56,12 @@ function checkArr(): bool
 function logToFile(): void
 {
     $logfile = fopen('out.log', 'a');
+    if ($logfile === false) return;
 
     $newline = date('d-m-y h:i:s') . " "
-            . $_SERVER['REMOTE_ADDR'] . " "
-            . http_response_code() . " ";
+        . $_SERVER['REMOTE_ADDR'] . " "
+        . http_response_code() . " ";
+
     if (array_key_exists('email', $_POST))
         $newline .= $_POST['email'];
     $newline .= PHP_EOL;
@@ -70,7 +72,7 @@ function logToFile(): void
 
 # Main program logic
 
-function process(): void
+function processReq(): void
 {
     if (!doKeysExist()) {
         http_response_code(400);
@@ -101,5 +103,5 @@ function process(): void
     echo 'Вход произошел успешно.';
 }
 
-process();
+processReq();
 logToFile();
