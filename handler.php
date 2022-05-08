@@ -35,9 +35,8 @@ function isPassValid(): bool
 
 function doKeysExist(): bool
 {
-    return  array_key_exists('email', $_POST) &&
-            array_key_exists('pass1', $_POST) &&
-            array_key_exists('pass2', $_POST);
+    $req_keys = ['email', 'pass1', 'pass2'];
+    return !array_diff($req_keys, array_keys($_POST));
 }
 
 # Looking up the entered email
